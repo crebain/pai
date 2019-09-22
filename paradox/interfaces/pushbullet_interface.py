@@ -46,7 +46,7 @@ class PushBulletWSClient(WebSocketBaseClient):
         self.manager.add(self)
         self.manager.start()
         for chat in self.pb.chats:
-            self.logger.debug("Associated contacts: {}".format(chat))
+            self.logger.info("Associated contacts: {}".format(chat))
 
         # Receiving pending messages
         self.received_message(json.dumps({"type": "tickle", "subtype": "push"}))
@@ -131,6 +131,7 @@ class PushBulletInterface(Interface):
         self.pb_ws = None
 
     def run(self):
+        super().run()
         self.logger.info("Starting Pushbullet Interface")
         try:
             self.pb_ws = PushBulletWSClient('wss://stream.pushbullet.com/websocket/{}'.format(cfg.PUSHBULLET_KEY))
@@ -149,16 +150,19 @@ class PushBulletInterface(Interface):
             self.logger.exception("PB")
 
     def set_alarm(self, alarm):
+        super().set_alarm(alarm)
         self.pb_ws.set_alarm(alarm)
 
 
     def stop(self):
         """ Stops the Pushbullet interface"""
+        super().stop()
         self.queue.put_nowait(SortableTuple((2, 'command', 'stop')))
         self.pb_ws.stop()
 
     def handle_panel_event(self, event):
         """Handle Live Event"""
+        super().handle_panel_event(event)
 
         if event.level.value < EventLevel.INFO.value:
             return
@@ -193,6 +197,7 @@ class PushBulletInterface(Interface):
             self.pb_ws.notify('panel', event.message, event.level)
 
     def handle_notify(self, message):
+        super().handle_notify(message)
         sender, message, level = message
         if sender == 'pushbullet':
             return

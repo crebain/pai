@@ -97,6 +97,7 @@ class InterfaceManager:
     def set_alarm(self, alarm):
         for interface in self.interfaces:
             try:
+                logger.info("Registering alarm for {}".format(interface))
                 interface.set_alarm(alarm)
             except Exception:
                 logger.exception(

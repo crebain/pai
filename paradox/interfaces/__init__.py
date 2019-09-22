@@ -23,6 +23,7 @@ class Interface(threading.Thread):
 
     def set_alarm(self, alarm):
         """ Sets the alarm """
+        self.logger.info("Alarm set for {}".format(self))
         self.alarm = alarm
 
     def stop(self):
