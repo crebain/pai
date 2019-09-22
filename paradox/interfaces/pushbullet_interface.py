@@ -127,6 +127,7 @@ class PushBulletInterface(Interface):
     def __init__(self):
         super().__init__()
 
+        self.logger = logging.getLogger('PAI').getChild(__name__)
         self.pb = None
         self.pb_ws = None
 
