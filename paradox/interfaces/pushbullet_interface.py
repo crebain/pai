@@ -29,6 +29,7 @@ class PushBulletWSClient(WebSocketBaseClient):
         self.logger = logging.getLogger('PAI').getChild(__name__)
         self.pb = Pushbullet(cfg.PUSHBULLET_KEY, cfg.PUSHBULLET_SECRET)
         self.manager = WebSocketManager()
+        self.manager.start()
         self.alarm = None
         self.interface = interface
 
@@ -44,7 +45,6 @@ class PushBulletWSClient(WebSocketBaseClient):
         """ Callback trigger when connection succeeded"""
         self.logger.info("Handshake OK")
         self.manager.add(self)
-        self.manager.start()
         for chat in self.pb.chats:
             self.logger.info("Associated contacts: {}".format(chat))
 
